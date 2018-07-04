@@ -84,7 +84,10 @@ BOARD_USES_RECOVERY_AS_BOOT := true
 AB_OTA_UPDATER := true
 
 # Crypto
+TARGET_HW_DISK_ENCRYPTION := true
 TW_INCLUDE_CRYPTO := true
+TW_INCLUDE_FBE := true
+PLATFORM_SECURITY_PATCH := 2025-12-31
 
 # TWRP specific build flags
 TW_THEME := portrait_hdpi
