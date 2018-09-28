@@ -14,6 +14,15 @@
 # limitations under the License.
 #
 
+# This contains the module build definitions for the hardware-specific
+# components for this device.
+#
+# As much as possible, those components should be built unconditionally,
+# with device-specific names to avoid collisions, to avoid device-specific
+# bitrot and build breakages. Building a component unconditionally does
+# *not* include it on all devices, so it is safe even with hardware-specific
+# components.
+
 # Architecture
 TARGET_ARCH := arm64
 TARGET_ARCH_VARIANT := armv8-a
@@ -91,23 +100,23 @@ PLATFORM_SECURITY_PATCH := 2025-12-31
 
 # TWRP specific build flags
 TW_THEME := portrait_hdpi
+TW_SCREEN_BLANK_ON_BOOT := true
 RECOVERY_SDCARD_ON_DATA := true
 BOARD_HAS_NO_REAL_SDCARD := true
 TARGET_RECOVERY_QCOM_RTC_FIX := true
 TARGET_RECOVERY_PIXEL_FORMAT := "BGRA_8888"
+TW_BRIGHTNESS_PATH := "/sys/class/backlight/panel0-backlight/brightness"
+TW_MAX_BRIGHTNESS := 255
 TW_INCLUDE_NTFS_3G := true
 TW_EXCLUDE_SUPERSU := true
 TW_EXTRA_LANGUAGES := true
 TW_INPUT_BLACKLIST := "hbtp_vm"
 TW_EXCLUDE_DEFAULT_USB_INIT := true
-TW_USE_LEDS_HAPTICS := true
-TWRP_INCLUDE_LOGCAT := true
-TARGET_USES_LOGD := true
+TW_EXCLUDE_TWRPAPP := true
 TW_NO_USB_STORAGE := true
 TW_USE_TOOLBOX := true
+TW_EXCLUDE_MTP := true
 TARGET_RECOVERY_DEVICE_MODULES += android.hardware.boot@1.0
 TW_RECOVERY_ADDITIONAL_RELINK_FILES := ${OUT}/system/lib64/android.hardware.boot@1.0.so
-TW_BRIGHTNESS_PATH := "/sys/class/backlight/panel0-backlight/brightness"
-TW_MAX_BRIGHTNESS := 255
-TW_EXCLUDE_MTP := true
-TW_EXCLUDE_TWRPAPP := true
+TWRP_INCLUDE_LOGCAT := true
+TARGET_USES_LOGD := true
