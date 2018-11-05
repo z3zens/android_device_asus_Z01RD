@@ -104,6 +104,7 @@ AB_OTA_UPDATER := true
 TARGET_HW_DISK_ENCRYPTION := true
 TW_INCLUDE_CRYPTO := true
 PLATFORM_SECURITY_PATCH := 2025-12-31
+TARGET_CRYPTFS_HW_PATH := vendor/qcom/opensource/cryptfs_hw
 
 # TWRP specific build flags
 TW_THEME := portrait_hdpi
@@ -130,3 +131,4 @@ TARGET_RECOVERY_DEVICE_MODULES += android.hardware.boot@1.0
 TW_RECOVERY_ADDITIONAL_RELINK_FILES := ${OUT}/system/lib64/android.hardware.boot@1.0.so ${OUT}/system/usr/share/zoneinfo/tzdata
 TWRP_INCLUDE_LOGCAT := true
 TARGET_USES_LOGD := true
+TW_USE_LEDS_HAPTICS := true
