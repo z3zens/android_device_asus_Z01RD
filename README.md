@@ -31,6 +31,7 @@ Asus Zenfone 5z was announced and released in June 2018.
 
 Works:
 
+- Decryption of /data
 - ADB
 - Screen brightness settings
 - Smooth UI
@@ -40,7 +41,6 @@ Works:
 
 Not (fully) works:
 
-- Decryption of /data
 - MTP Does not work
 
 ## Thanks
