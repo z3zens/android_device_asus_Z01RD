@@ -1,1 +1,4 @@
 ro.display.series=Asus Zenfone 5z
+ro.product.board=sdm845
+ro.board.platform=sdm845
+ro.build.version.release=9
