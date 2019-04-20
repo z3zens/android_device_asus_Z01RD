@@ -129,6 +129,5 @@ TW_USE_TOOLBOX := true
 TW_EXCLUDE_MTP := true
 TARGET_RECOVERY_DEVICE_MODULES := tzdata
 TARGET_RECOVERY_DEVICE_MODULES += android.hardware.boot@1.0
-TW_RECOVERY_ADDITIONAL_RELINK_FILES := ${OUT}/system/lib64/android.hardware.boot@1.0.so ${OUT}/system/usr/share/zoneinfo/tzdata
 TWRP_INCLUDE_LOGCAT := true
 TARGET_USES_LOGD := true
