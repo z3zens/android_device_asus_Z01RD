@@ -15,7 +15,7 @@
 #
 
 # Release name
-PRODUCT_RELEASE_NAME := z01r
+PRODUCT_RELEASE_NAME := Z01R
 
 $(call inherit-product, build/target/product/embedded.mk)
 
@@ -23,15 +23,15 @@ $(call inherit-product, build/target/product/embedded.mk)
 $(call inherit-product, vendor/omni/config/common.mk)
 
 ## Device identifier. This must come after all inclusions
-PRODUCT_NAME := omni_z01r
-PRODUCT_DEVICE := z01r
+PRODUCT_NAME := omni_Z01R
+PRODUCT_DEVICE := Z01R
 PRODUCT_BRAND := Asus
 PRODUCT_MODEL := Zenfone 5z
 PRODUCT_MANUFACTURER := Asus
 
-TARGET_VENDOR_PRODUCT_NAME := z01r
-TARGET_VENDOR_DEVICE_NAME := z01r
+TARGET_VENDOR_PRODUCT_NAME := Z01R
+TARGET_VENDOR_DEVICE_NAME := Z01R
 PRODUCT_BUILD_PROP_OVERRIDES += \
-    TARGET_DEVICE=z01r \
-    BUILD_PRODUCT=z01r \
-    PRODUCT_NAME=z01r
+    TARGET_DEVICE=Z01R \
+    BUILD_PRODUCT=Z01R \
+    PRODUCT_NAME=Z01R
