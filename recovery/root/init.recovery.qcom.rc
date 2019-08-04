@@ -103,6 +103,7 @@ service time_daemon /sbin/time_daemon
 	seclabel u:r:recovery:s0
 
 on boot
+	export LD_CONFIG_FILE /sbin/ld.config.txt
 	setprop sys.usb.config adb
     write /sys/bus/i2c/devices/3-0038/fts_gesture_mode 1
     write /sys/devices/platform/soc/c440000.qcom,spmi/spmi-0/spmi0-02/c440000.qcom,spmi:qcom,pmi8998@2:qcom,qpnp-smb2/power_supply/usb/otg_switch 1
