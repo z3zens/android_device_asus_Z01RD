@@ -1,9 +1,6 @@
-For building TWRP for Asus Zenfone 5z
-
 TWRP device tree for Asus Zenfone 5z
 
-The Asus Zenfone 5z (codenamed _"z01r"_) are high-end smartphones from Asus.
-
+The Asus Zenfone 5z (codenamed _"Z01R"_) are high-end smartphones from Asus.
 Asus Zenfone 5z was announced and released in June 2018.
 
 ## Device specifications
@@ -27,22 +24,36 @@ Asus Zenfone 5z was announced and released in June 2018.
 
 ![Asus Zenfone 5z](https://cdn2.gsmarena.com/vv/pics/asus/asus-zenfone-5-ze620kl-5z-zs620kl-1.jpg)
 
-## Features
+## Compile
 
-Works:
+First download omni-9.0 tree:
 
-- Decryption of /data
-- ADB
-- Screen brightness settings
-- Smooth UI
-- Vibration on touch 
-- Correct screenshot color
-- Active slot switching from TWRP
+```
+repo init -u git://github.com/minimal-manifest-twrp/platform_manifest_twrp_omni.git -b twrp-9.0
+```
+Then add these string to .repo/manifests/remove.xml
 
-Not (fully) works:
 
-- MTP Does not work
+Then add these projects to .repo/local_manifests/roomservice.xml (If you don't have it, you can add them to .repo/manifest.xml): 
 
-## Thanks
+```xml
+<project name="Jackeagle/twrp_device_asus_z01r" path="device/asus/Z01R" remote="github" revision="android-9.0" />
+```
 
-- wuxianlin for enchilada TWRP tree :[android_device_oneplus_enchilada](https://github.com/TeamWin/android_device_oneplus_enchilada)
+Now you can sync your source:
+
+```
+repo sync
+```
+
+To auotomatic make the twrp installer, you need to import this commit in the build/make path: https://gerrit.omnirom.org/#/c/android_build/+/33182/
+
+Finally execute these:
+
+```
+. build/envsetup.sh
+export ALLOW_MISSING_DEPENDENCIES=true
+export LC_ALL=C
+lunch omni_Z01R-eng
+mka adbd recoveryimage 
+```
