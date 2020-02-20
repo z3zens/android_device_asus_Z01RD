@@ -62,7 +62,7 @@ TARGET_KERNEL_ARCH := arm64
 TARGET_KERNEL_CONFIG := Z01R_defconfig
 TARGET_KERNEL_CROSS_COMPILE_PREFIX := aarch64-linux-android-
 TARGET_KERNEL_SOURCE := kernel/asus/sdm845
-#TARGET_PREBUILT_KERNEL := device/asus/z01r/prebuilt/Image.gz-dtb
+#TARGET_PREBUILT_KERNEL := device/asus/ASUS_Z01RD/prebuilt/Image.gz-dtb
 
 # Platform
 TARGET_BOARD_PLATFORM := sdm845
@@ -86,8 +86,12 @@ TARGET_USERIMAGES_USE_EXT4 := true
 # Workaround for error copying vendor files to recovery ramdisk
 TARGET_COPY_OUT_VENDOR := vendor
 
+#Init
+TARGET_INIT_VENDOR_LIB := libinit_ASUS_Z01RD
+TARGET_RECOVERY_DEVICE_MODULES := libinit_ASUS_Z01RD
+
 # Recovery
-TARGET_OTA_ASSERT_DEVICE := Z01R
+TARGET_OTA_ASSERT_DEVICE := ASUS_Z01RD
 BOARD_HAS_LARGE_FILESYSTEM := true
 BOARD_HAS_NO_SELECT_BUTTON := true
 
@@ -136,4 +140,4 @@ TARGET_USES_LOGD := true
 TW_Y_OFFSET := 80
 TW_H_OFFSET := -80
 USE_RECOVERY_INSTALLER := true
-RECOVERY_INSTALLER_PATH := device/asus/Z01R/installer
+RECOVERY_INSTALLER_PATH := device/asus/ASUS_Z01RD/installer

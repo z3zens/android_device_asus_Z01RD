@@ -1,2 +1,2 @@
-add_lunch_combo omni_z01r-eng
-add_lunch_combo omni_z01r-userdebug
+add_lunch_combo omni_ASUS_Z01RD-eng
+add_lunch_combo omni_ASUS_Z01RD-userdebug

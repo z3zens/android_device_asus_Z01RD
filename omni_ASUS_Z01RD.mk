@@ -15,7 +15,7 @@
 #
 
 # Release name
-PRODUCT_RELEASE_NAME := Z01R
+PRODUCT_RELEASE_NAME := ASUS_Z01RD
 
 $(call inherit-product, build/target/product/embedded.mk)
 
@@ -26,15 +26,19 @@ PRODUCT_PROPERTY_OVERRIDES += \
     ro.hardware.keystore=sdm845
 
 ## Device identifier. This must come after all inclusions
-PRODUCT_NAME := omni_Z01R
-PRODUCT_DEVICE := Z01R
+PRODUCT_NAME := omni_ASUS_Z01RD
+PRODUCT_DEVICE := ASUS_Z01RD
 PRODUCT_BRAND := Asus
 PRODUCT_MODEL := Zenfone 5z
 PRODUCT_MANUFACTURER := Asus
 
 TARGET_VENDOR_PRODUCT_NAME := Z01R
-TARGET_VENDOR_DEVICE_NAME := Z01R
+TARGET_VENDOR_DEVICE_NAME := ASUS_Z01R_1
 PRODUCT_BUILD_PROP_OVERRIDES += \
-    TARGET_DEVICE=Z01R \
-    BUILD_PRODUCT=Z01R \
-    PRODUCT_NAME=Z01R
+    TARGET_DEVICE=ASUS_Z01R_1 \
+    BUILD_PRODUCT=ASUS_Z01RD \
+    PRODUCT_NAME=WW_Z01R
+
+PRODUCT_SYSTEM_PROPERTY_BLACKLIST += \
+    ro.bootimage.build.date.utc \
+    ro.build.date.utc
