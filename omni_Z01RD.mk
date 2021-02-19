@@ -17,24 +17,18 @@
 # Release name
 PRODUCT_RELEASE_NAME := Z01RD
 
-$(call inherit-product, build/target/product/embedded.mk)
-
 # Inherit from our custom product configuration
+$(call inherit-product, $(SRC_TARGET_DIR)/product/core_64_bit.mk)
+$(call inherit-product, $(SRC_TARGET_DIR)/product/full_base_telephony.mk)
+$(call inherit-product, $(SRC_TARGET_DIR)/product/languages_full.mk)
 $(call inherit-product, vendor/omni/config/common.mk)
-
-PRODUCT_PROPERTY_OVERRIDES += \
-    ro.hardware.keystore=sdm845
 
 ## Device identifier. This must come after all inclusions
 PRODUCT_NAME := omni_Z01RD
 PRODUCT_DEVICE := Z01RD
-PRODUCT_BRAND := Asus
+PRODUCT_BRAND := asus
 PRODUCT_MODEL := Zenfone 5z
 PRODUCT_MANUFACTURER := Asus
-
-# Resolution
-TARGET_SCREEN_HEIGHT := 2280
-TARGET_SCREEN_WIDTH := 1080
 
 TARGET_VENDOR_PRODUCT_NAME := Z01R
 TARGET_VENDOR_DEVICE_NAME := ASUS_Z01R_1
@@ -43,6 +37,5 @@ PRODUCT_BUILD_PROP_OVERRIDES += \
     BUILD_PRODUCT=Z01RD \
     PRODUCT_NAME=WW_Z01R
 
-PRODUCT_SYSTEM_PROPERTY_BLACKLIST += \
-    ro.bootimage.build.date.utc \
-    ro.build.date.utc
+# Inherit from hardware-specific part of the product configuration
+$(call inherit-product, device/$(PRODUCT_BRAND)/$(PRODUCT_DEVICE)/device.mk)

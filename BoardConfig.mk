@@ -23,6 +23,8 @@
 # *not* include it on all devices, so it is safe even with hardware-specific
 # components.
 
+DEVICE_PATH := device/asus/Z01RD
+
 # Architecture
 TARGET_ARCH := arm64
 TARGET_ARCH_VARIANT := armv8-a
@@ -31,7 +33,7 @@ TARGET_CPU_ABI2 :=
 TARGET_CPU_VARIANT := kryo
 
 TARGET_2ND_ARCH := arm
-TARGET_2ND_ARCH_VARIANT := armv7-a-neon
+TARGET_2ND_ARCH_VARIANT := armv8-a
 TARGET_2ND_CPU_ABI := armeabi-v7a
 TARGET_2ND_CPU_ABI2 := armeabi
 TARGET_2ND_CPU_VARIANT := cortex-a53
@@ -51,22 +53,39 @@ BOARD_KERNEL_TAGS_OFFSET := 0x00000100
 BOARD_RAMDISK_OFFSET     := 0x01000000
 BOARD_ROOT_EXTRA_FOLDERS := firmware bt_firmware dsp persist
 BOARD_ROOT_EXTRA_SYMLINKS := /vendor/xrom:/xrom /vendor/ADF:/ADF /vendor/APD:/APD /vendor/asdf:asdf /vendor/factory:factory
-BOARD_KERNEL_CMDLINE := console=ttyMSM0,115200n8 earlycon=msm_geni_serial,0xA84000 androidboot.hardware=qcom androidboot.console=ttyMSM0 video=vfb:640x400,bpp=32,memsize=3072000 msm_rtb.filter=0x237 ehci-hcd.park=3 lpm_levels.sleep_disabled=1 service_locator.enable=1 swiotlb=2048 androidboot.configfs=true firmware_class.path=/vendor/firmware_mnt/image loop.max_part=7 androidboot.usbcontroller=a600000.dwc3
-BOARD_KERNEL_CMDLINE += androidboot.selinux=permissive
-BOARD_KERNEL_CMDLINE += androidboot.fastboot=1
-BOARD_KERNEL_CMDLINE += buildv=WW_user_90.11.162.72
-BOARD_KERNEL_CMDLINE += androidboot.avb_version=0.0 androidboot.vbmeta.avb_version=0.0
+BOARD_KERNEL_CMDLINE :=  \
+    console=ttyMSM0,115200n8 \
+    earlycon=msm_geni_serial,0xA84000 \
+    androidboot.hardware=qcom \
+    androidboot.console=ttyMSM0 \
+    video=vfb:640x400,bpp=32,memsize=3072000 \
+    msm_rtb.filter=0x237 \
+    ehci-hcd.park=3 \
+    lpm_levels.sleep_disabled=1 \
+    service_locator.enable=1 \
+    swiotlb=2048 \
+    androidboot.configfs=true \
+    loop.max_part=7 \
+    androidboot.usbcontroller=a600000.dwc3 \
+    androidboot.fastboot=1 \
+    buildv=WW_user_100.10.107.110 \
+    androidboot.avb_version=0.0 \
+    androidboot.vbmeta.avb_version=0.0 \
+    androidboot.selinux=permissive
 BOARD_KERNEL_IMAGE_NAME := Image.gz-dtb
 NEED_KERNEL_MODULE_SYSTEM := true
 TARGET_KERNEL_ARCH := arm64
-#TARGET_KERNEL_CONFIG := Z01R_defconfig
-#TARGET_KERNEL_CROSS_COMPILE_PREFIX := aarch64-linux-android-
-#TARGET_KERNEL_SOURCE := kernel/asus/sdm845
-TARGET_PREBUILT_KERNEL := device/asus/Z01RD/prebuilt/Image.gz-dtb
+TARGET_PREBUILT_KERNEL := $(DEVICE_PATH)/prebuilt/$(BOARD_KERNEL_IMAGE_NAME)
+ifeq ($(TARGET_PREBUILT_KERNEL),)
+  TARGET_KERNEL_CONFIG := Z01R_defconfig
+  TARGET_KERNEL_CROSS_COMPILE_PREFIX := aarch64-linux-android-
+  TARGET_KERNEL_SOURCE := kernel/asus/sdm845
+endif
 
 # Platform
 TARGET_BOARD_PLATFORM := sdm845
 TARGET_BOARD_PLATFORM_GPU := qcom-adreno630
+TARGET_SUPPORTS_64_BIT_APPS := true
 
 # Partitions
 BOARD_FLASH_BLOCK_SIZE := 262144
@@ -82,13 +101,40 @@ BOARD_USERDATAIMAGE_FILE_SYSTEM_TYPE := ext4
 BOARD_VENDORIMAGE_FILE_SYSTEM_TYPE := ext4
 TARGET_USERIMAGES_USE_F2FS := true
 TARGET_USERIMAGES_USE_EXT4 := true
+TARGET_RECOVERY_DEVICE_MODULES += \
+    android.hidl.base@1.0 \
+    android.hardware.boot@1.0 \
+    ashmemd \
+    ashmemd_aidl_interface-cpp \
+    libashmemd_client \
+    libcap \
+    libicui18n \
+    libion \
+    libicuuc \
+    libpcrecpp \
+    libxml2 \
+    tzdata
+
+TW_RECOVERY_ADDITIONAL_RELINK_BINARY_FILES += \
+    $(TARGET_OUT_EXECUTABLES)/ashmemd
+
+TW_RECOVERY_ADDITIONAL_RELINK_LIBRARY_FILES += \
+    $(TARGET_OUT_SHARED_LIBRARIES)/android.hidl.base@1.0.so \
+    $(TARGET_OUT_SHARED_LIBRARIES)/ashmemd_aidl_interface-cpp.so \
+    $(TARGET_OUT_SHARED_LIBRARIES)/libashmemd_client.so \
+    $(TARGET_OUT_SHARED_LIBRARIES)/libcap.so \
+    $(TARGET_OUT_SHARED_LIBRARIES)/libicui18n.so \
+    $(TARGET_OUT_SHARED_LIBRARIES)/libicuuc.so \
+    $(TARGET_OUT_SHARED_LIBRARIES)/libion.so \
+    $(TARGET_OUT_SHARED_LIBRARIES)/libpcrecpp.so \
+    $(TARGET_OUT_SHARED_LIBRARIES)/libxml2.so
 
 # Workaround for error copying vendor files to recovery ramdisk
 TARGET_COPY_OUT_VENDOR := vendor
 
 #Init
 TARGET_INIT_VENDOR_LIB := libinit_Z01RD
-TARGET_RECOVERY_DEVICE_MODULES := libinit_Z01RD
+TARGET_RECOVERY_DEVICE_MODULES += libinit_Z01RD
 
 # Recovery
 TARGET_OTA_ASSERT_DEVICE := Z01RD
@@ -100,20 +146,21 @@ BOARD_AVB_ENABLE := false
 BOARD_BUILD_DISABLED_VBMETAIMAGE := true
 
 # Enable A/B Specific Flags
-TARGET_NO_KERNEL := false
-TARGET_NO_RECOVERY := false
 BOARD_BUILD_SYSTEM_ROOT_IMAGE := true
 BOARD_USES_RECOVERY_AS_BOOT := true
-AB_OTA_UPDATER := true
 
 # Crypto
+TARGET_CRYPTFS_HW_PATH := vendor/qcom/opensource/commonsys/cryptfs_hw
 TARGET_HW_DISK_ENCRYPTION := true
 TW_INCLUDE_CRYPTO := true
+TW_INCLUDE_RESETPROP := true
+BOARD_USES_QCOM_FBE_DECRYPTION := true
 PLATFORM_VERSION := 16.1.0
 PLATFORM_SECURITY_PATCH := 2099-12-31
-TARGET_CRYPTFS_HW_PATH := vendor/qcom/opensource/commonsys/cryptfs_hw
+VENDOR_SECURITY_PATCH :=  2099-12-31
 
 # TWRP specific build flags
+TARGET_SYSTEM_PROP += $(DEVICE_PATH)/system.prop
 TW_THEME := portrait_hdpi
 TW_SCREEN_BLANK_ON_BOOT := true
 RECOVERY_SDCARD_ON_DATA := true
@@ -124,20 +171,15 @@ TARGET_USE_CUSTOM_LUN_FILE_PATH := /config/usb_gadget/g1/functions/mass_storage.
 TW_BRIGHTNESS_PATH := "/sys/class/backlight/panel0-backlight/brightness"
 TW_MAX_BRIGHTNESS := 255
 TW_INCLUDE_NTFS_3G := true
-TW_EXCLUDE_SUPERSU := true
 TW_EXTRA_LANGUAGES := true
 TW_INPUT_BLACKLIST := "hbtp_vm"
-TW_EXCLUDE_DEFAULT_USB_INIT := true
 TW_EXCLUDE_TWRPAPP := true
 TW_NO_USB_STORAGE := true
-TW_USE_TOOLBOX := true
 TW_INCLUDE_REPACKTOOLS := true
 TW_HAS_EDL_MODE := true
-TARGET_RECOVERY_DEVICE_MODULES := tzdata
-TARGET_RECOVERY_DEVICE_MODULES += android.hardware.boot@1.0
 TWRP_INCLUDE_LOGCAT := true
 TARGET_USES_LOGD := true
 TW_Y_OFFSET := 80
 TW_H_OFFSET := -80
 USE_RECOVERY_INSTALLER := true
-RECOVERY_INSTALLER_PATH := device/asus/Z01RD/installer
+RECOVERY_INSTALLER_PATH := bootable/recovery/installer

@@ -5,24 +5,25 @@ Asus Zenfone 5z was announced and released in June 2018.
 
 ## Device specifications
 
-| Device       | Asus Zenfone 5z                                 |
-| -----------: | :---------------------------------------------- |
-| SoC          | Qualcomm SDM845 Snapdragon 845                  |
-| CPU          | 8x Qualcomm® Kryo™ 385 up to 2.8GHz             |
-| GPU          | Adreno 630                                      |
-| Memory       | 4GB / 6GB / 8GB RAM (LPDDR4X)                   |
-| Shipped Android version | 8.0                                  |
-| Storage      | 64GB / 128GB / 256GB UFS 2.1 flash storage      |
-| Battery      | Non-removable Li-Po 3300 mAh                    |
-| Dimensions   | 153 x 75.7 x 7.9 mm                             |
-| Display      | 1080 x 2246 pixels, (18.7:9) 6.2 inch           |
-| Rear camera 1 | 12MP, f/1.8 Dual LED flash                     |
-| Rear camera 2 | 8MP, f/2.0                                     |
-| Front camera | 8MP, 1.12µm, f/2.0 1080p 30 fps video           |
+| Baisc                   | Specification Sheet                                                                                                                 |
+| ----------------------: | :---------------------------------------------------------------------------------------------------------------------------------- |
+| SoC                     | Qualcomm SDM845 Snapdragon 845                                                                                                      |
+| CPU                     | Octa-core (4x2.8 GHz Kryo 385 Gold & 4x1.8 GHz Kryo 385 Silver)                                                                     |
+| GPU                     | Adreno 630                                                                                                                          |
+| Memory                  | 4GB / 6GB / 8GB RAM (LPDDR4X)                                                                                                       |
+| Shipped Android Version | 8.0 with ZenUI 5                                                                                                                    |
+| Last version of Android | 10.0 with ZenUI 6                                                                                                                   |
+| Storage                 | 64/128/256 GB UFS2.1                                                                                                                |
+| Battery                 | Non-removable Li-Poly 3300 mAh battery                                                                                              |
+| Display                 | 1080 x 2246 pixels, 18.7:9 ratio, 6.2 inches, IPS LCD (~402 ppi density)                                                            |
+| Extras                  | Dual speakers, NFC                                                                                                                  |
+| Rear Camera 1 (IMX363)  | 12MP, 4-axis OIS, f/1.8, 1/2.55" large sensor size, 1.4µm large pixel size, dual-pixel PDAF, 83° FOV, dual-LED (dual tone) flash    |
+| Rear Camera 2 (ov8856)  | 8MP, f/2.0, 120° wide-angle camera                                                                                                  |
+| Front Camera (ov8856)   | 8MP, 1.12µm, f/2.0, 84° FOV, 1080p 30 fps video                                                                                     |
 
 ## Device picture
 
-![Asus Zenfone 5z](https://cdn2.gsmarena.com/vv/pics/asus/asus-zenfone-5-ze620kl-5z-zs620kl-1.jpg)
+![Asus Zenfone 5z](https://i.imgur.com/SL8yhBe.jpg)
 
 
 ## Kernel
@@ -32,18 +33,24 @@ https://github.com/5z-devs/android_kernel_asus_sdm845
 
 ## Compile
 
-First download omni-9.0 tree:
+First repo init the TWRP 10.0 tree (and necessary qcom dependencies):
 
 ```
-repo init -u git://github.com/minimal-manifest-twrp/platform_manifest_twrp_omni.git -b twrp-9.0
+mkdir ~/android/twrp-10.0
+cd ~/android/twrp-10.0
+repo init -u git://github.com/minimal-manifest-twrp/platform_manifest_twrp_omni.git -b twrp-10.0
+mkdir -p .repo/local_manifests
+curl https://raw.githubusercontent.com/TeamWin/buildtree_manifests/master/min-omni-10.0/qcom.xml > .repo/local_manifests/qcom.xml
 ```
-Then add these string to .repo/manifests/remove.xml
 
-
-Then add these projects to .repo/local_manifests/roomservice.xml (If you don't have it, you can add them to .repo/manifest.xml): 
+Then add to a local manifest (if you don't have .repo/local_manifest then make that directory and make a blank file and name it something like twrp.xml):
 
 ```xml
-<project name="TeamWin/android_device_asus_Z01RD" path="device/asus/Z01RD" remote="github" revision="android-9.0" />
+<?xml version="1.0" encoding="UTF-8"?>
+<manifest>
+  <project name="osm0sis/twrp_abtemplate" path="bootable/recovery/installer" remote="github" revision="master"/>
+  <project name="android_device_asus_Z01RD" path="device/asus/Z01RD" remote="TeamWin" revision="android-10"/>
+</manifest>
 ```
 
 Now you can sync your source:
@@ -61,5 +68,5 @@ Finally execute these:
 export ALLOW_MISSING_DEPENDENCIES=true
 export LC_ALL=C
 lunch omni_Z01RD-eng
-mka adbd recoveryimage 
+mka adbd recoveryimage
 ```
