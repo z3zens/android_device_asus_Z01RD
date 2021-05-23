@@ -40,6 +40,10 @@ PRODUCT_PACKAGES += \
     update_engine \
     update_verifier
 
+PRODUCT_PACKAGES += \
+    bootctrl.$(PRODUCT_PLATFORM) \
+    update_engine_sideload
+
 AB_OTA_POSTINSTALL_CONFIG += \
     RUN_POSTINSTALL_system=true \
     POSTINSTALL_PATH_system=system/bin/otapreopt_script \
@@ -58,6 +62,16 @@ TARGET_SCREEN_WIDTH := 1080
 # tzdata
 PRODUCT_PACKAGES += \
     tzdata_twrp
+
+# Boot control HAL
+PRODUCT_PACKAGES += \
+    android.hardware.boot@1.0-impl \
+    android.hardware.boot@1.0-service \
+    android.hardware.boot@1.0-impl-wrapper.recovery \
+    android.hardware.boot@1.0-impl-wrapper \
+    android.hardware.boot@1.0-impl.recovery \
+    bootctrl.$(PRODUCT_PLATFORM) \
+    bootctrl.$(PRODUCT_PLATFORM).recovery
 
 # Soong namespaces
 PRODUCT_SOONG_NAMESPACES += \
