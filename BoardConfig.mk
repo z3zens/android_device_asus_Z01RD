@@ -23,7 +23,8 @@
 # *not* include it on all devices, so it is safe even with hardware-specific
 # components.
 
-DEVICE_PATH := device/asus/Z01RD
+# Default device path
+DEVICE_PATH := device/$(PRODUCT_BRAND)/$(TARGET_DEVICE)
 
 # Architecture
 TARGET_ARCH := arm64
@@ -71,19 +72,16 @@ BOARD_KERNEL_CMDLINE :=  \
     androidboot.vbmeta.avb_version=0.0 \
     androidboot.selinux=permissive
 BOARD_KERNEL_IMAGE_NAME := Image.gz-dtb
-NEED_KERNEL_MODULE_SYSTEM := true
 TARGET_KERNEL_ARCH := arm64
 TARGET_PREBUILT_KERNEL := $(DEVICE_PATH)/prebuilt/$(BOARD_KERNEL_IMAGE_NAME)
 ifeq ($(TARGET_PREBUILT_KERNEL),)
   TARGET_KERNEL_CONFIG := Z01R_defconfig
-  TARGET_KERNEL_CROSS_COMPILE_PREFIX := aarch64-linux-android-
   TARGET_KERNEL_SOURCE := kernel/asus/$(PRODUCT_PLATFORM)
 endif
 
 # Platform
-TARGET_BOARD_PLATFORM := $(PRODUCT_PLATFORM)
+TARGET_BOARD_PLATFORM := $(TARGET_BOOTLOADER_BOARD_NAME)
 TARGET_BOARD_PLATFORM_GPU := qcom-adreno630
-TARGET_SUPPORTS_64_BIT_APPS := true
 TARGET_USES_HARDWARE_QCOM_BOOTCTRL := true
 QCOM_BOARD_PLATFORMS += $(TARGET_BOARD_PLATFORM)
 
@@ -115,37 +113,22 @@ BOARD_ROOT_EXTRA_FOLDERS := ADF \
 TARGET_RECOVERY_DEVICE_MODULES += \
     android.hidl.base@1.0 \
     bootctrl.$(TARGET_BOARD_PLATFORM) \
-    ashmemd \
-    ashmemd_aidl_interface-cpp \
-    libashmemd_client \
+    libandroidicu \
     libcap \
-    libicui18n \
     libion \
-    libicuuc \
     libpcrecpp \
     libxml2 \
     tzdata
 
-TW_RECOVERY_ADDITIONAL_RELINK_BINARY_FILES += \
-    $(TARGET_OUT_EXECUTABLES)/ashmemd
-
 TW_RECOVERY_ADDITIONAL_RELINK_LIBRARY_FILES += \
     $(TARGET_OUT_SHARED_LIBRARIES)/android.hidl.base@1.0.so \
-    $(TARGET_OUT_SHARED_LIBRARIES)/ashmemd_aidl_interface-cpp.so \
-    $(TARGET_OUT_SHARED_LIBRARIES)/libashmemd_client.so \
     $(TARGET_OUT_SHARED_LIBRARIES)/libcap.so \
-    $(TARGET_OUT_SHARED_LIBRARIES)/libicui18n.so \
-    $(TARGET_OUT_SHARED_LIBRARIES)/libicuuc.so \
     $(TARGET_OUT_SHARED_LIBRARIES)/libion.so \
     $(TARGET_OUT_SHARED_LIBRARIES)/libpcrecpp.so \
     $(TARGET_OUT_SHARED_LIBRARIES)/libxml2.so
 
 # Workaround for error copying vendor files to recovery ramdisk
 TARGET_COPY_OUT_VENDOR := vendor
-
-#Init
-TARGET_INIT_VENDOR_LIB := libinit_Z01RD
-TARGET_RECOVERY_DEVICE_MODULES += libinit_Z01RD
 
 # Recovery
 TARGET_OTA_ASSERT_DEVICE := Z01RD
@@ -161,14 +144,17 @@ BOARD_BUILD_SYSTEM_ROOT_IMAGE := true
 BOARD_USES_RECOVERY_AS_BOOT := true
 
 # Crypto
-TARGET_CRYPTFS_HW_PATH := vendor/qcom/opensource/commonsys/cryptfs_hw
-TARGET_HW_DISK_ENCRYPTION := true
 TW_INCLUDE_CRYPTO := true
 TW_INCLUDE_RESETPROP := true
+TW_USE_FSCRYPT_POLICY := 1
 BOARD_USES_QCOM_FBE_DECRYPTION := true
 PLATFORM_VERSION := 16.1.0
 PLATFORM_SECURITY_PATCH := 2099-12-31
 VENDOR_SECURITY_PATCH :=  2099-12-31
+
+# SELinux
+BOARD_PLAT_PRIVATE_SEPOLICY_DIR += $(DEVICE_PATH)/sepolicy/private
+SELINUX_IGNORE_NEVERALLOWS := true
 
 # TWRP specific build flags
 TARGET_SYSTEM_PROP += $(DEVICE_PATH)/system.prop
@@ -178,13 +164,13 @@ RECOVERY_SDCARD_ON_DATA := true
 BOARD_HAS_NO_REAL_SDCARD := true
 BOARD_PROVIDES_GPTUTILS := true
 TARGET_RECOVERY_QCOM_RTC_FIX := true
-TARGET_RECOVERY_PIXEL_FORMAT := "BGRA_8888"
+TARGET_RECOVERY_PIXEL_FORMAT := BGRA_8888
 TARGET_USE_CUSTOM_LUN_FILE_PATH := /config/usb_gadget/g1/functions/mass_storage.0/lun.%d/file
-TW_BRIGHTNESS_PATH := "/sys/class/backlight/panel0-backlight/brightness"
+TW_BRIGHTNESS_PATH := /sys/class/backlight/panel0-backlight/brightness
 TW_MAX_BRIGHTNESS := 255
 TW_INCLUDE_NTFS_3G := true
 TW_EXTRA_LANGUAGES := true
-TW_INPUT_BLACKLIST := "hbtp_vm"
+TW_INPUT_BLACKLIST := hbtp_vm
 TW_EXCLUDE_TWRPAPP := true
 TW_NO_USB_STORAGE := true
 TW_INCLUDE_REPACKTOOLS := true

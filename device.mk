@@ -18,9 +18,6 @@
 # Inherit from the common Open Source product configuration
 $(call inherit-product, $(SRC_TARGET_DIR)/product/base.mk)
 
-# define hardware platform
-PRODUCT_PLATFORM := sdm845
-
 # A/B support
 AB_OTA_UPDATER := true
 
@@ -34,15 +31,13 @@ AB_OTA_PARTITIONS += \
     vbmeta \
     dtbo
 
+# A/B support
 PRODUCT_PACKAGES += \
     otapreopt_script \
     cppreopts.sh \
     update_engine \
+    update_engine_sideload \
     update_verifier
-
-PRODUCT_PACKAGES += \
-    bootctrl.$(PRODUCT_PLATFORM) \
-    update_engine_sideload
 
 AB_OTA_POSTINSTALL_CONFIG += \
     RUN_POSTINSTALL_system=true \
@@ -59,23 +54,34 @@ PRODUCT_PACKAGES += \
 TARGET_SCREEN_HEIGHT := 2280
 TARGET_SCREEN_WIDTH := 1080
 
-# tzdata
-PRODUCT_PACKAGES += \
-    tzdata_twrp
-
 # Boot control HAL
 PRODUCT_PACKAGES += \
-    android.hardware.boot@1.0-impl \
-    android.hardware.boot@1.0-service \
-    android.hardware.boot@1.0-impl-wrapper.recovery \
-    android.hardware.boot@1.0-impl-wrapper \
     android.hardware.boot@1.0-impl.recovery \
-    bootctrl.$(PRODUCT_PLATFORM) \
     bootctrl.$(PRODUCT_PLATFORM).recovery
+
+PRODUCT_PACKAGES_DEBUG += \
+    bootctl
+
+# Dependencies
+PRODUCT_COPY_FILES += \
+    $(OUT_DIR)/target/product/$(PRODUCT_RELEASE_NAME)/obj/SHARED_LIBRARIES/libandroidicu_intermediates/libandroidicu.so:$(TARGET_COPY_OUT_RECOVERY)/root/system/lib64/libandroidicu.so
+
+# Health HAL
+PRODUCT_PACKAGES += \
+    android.hardware.health@2.1-impl.recovery
 
 # Soong namespaces
 PRODUCT_SOONG_NAMESPACES += \
     $(LOCAL_PATH)
+
+# Overrides
+PRODUCT_BUILD_PROP_OVERRIDES += \
+    PRODUCT_DEVICE=ASUS_Z01RD \
+    PRODUCT_NAME=WW_$(PRODUCT_RELEASE_NAME) \
+    TARGET_DEVICE=ZS620KL
+
+PRODUCT_PROPERTY_OVERRIDES += \
+    ro.build.product=ZS620KL
 
 # Blacklist
 PRODUCT_SYSTEM_PROPERTY_BLACKLIST += \

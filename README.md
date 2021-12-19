@@ -29,18 +29,18 @@ Asus Zenfone 5z was announced and released in June 2018.
 ## Kernel
 
 Prebuilt kernel source:
-https://github.com/5z-devs/android_kernel_asus_sdm845/commits/ed6c0fddc76661961b87ca9acabc96213bc197a3
+https://github.com/5z-devs/android_kernel_asus_sdm845/commits/ffdc8c11296faba94bac36010a05b1f7e0ee5b35
 
 ## Compile
 
-First repo init the TWRP 10.0 tree (and necessary qcom dependencies):
+First repo init the twrp-11 tree (and necessary qcom dependencies):
 
 ```
-mkdir ~/android/twrp-10.0
-cd ~/android/twrp-10.0
-repo init -u git://github.com/minimal-manifest-twrp/platform_manifest_twrp_omni.git -b twrp-10.0
+mkdir ~/android/twrp-11
+cd ~/android/twrp-11
+repo init -u git://github.com/minimal-manifest-twrp/platform_manifest_twrp_aosp.git -b twrp-11
 mkdir -p .repo/local_manifests
-curl https://raw.githubusercontent.com/TeamWin/buildtree_manifests/master/min-omni-10.0/qcom.xml > .repo/local_manifests/qcom.xml
+curl https://raw.githubusercontent.com/TeamWin/buildtree_manifests/master/min-aosp-11/qcom.xml > .repo/local_manifests/qcom.xml
 ```
 
 Then add to a local manifest (if you don't have .repo/local_manifest then make that directory and make a blank file and name it something like twrp.xml):
@@ -49,7 +49,7 @@ Then add to a local manifest (if you don't have .repo/local_manifest then make t
 <?xml version="1.0" encoding="UTF-8"?>
 <manifest>
   <project name="osm0sis/twrp_abtemplate" path="bootable/recovery/installer" remote="github" revision="master"/>
-  <project name="android_device_asus_Z01RD" path="device/asus/Z01RD" remote="TeamWin" revision="android-10"/>
+  <project name="android_device_asus_Z01RD" path="device/asus/Z01RD" remote="TeamWin" revision="android-11"/>
 </manifest>
 ```
 
@@ -59,7 +59,7 @@ Now you can sync your source:
 repo sync
 ```
 
-To auotomatic make the twrp installer, you need to import this commit in the build/make path: https://gerrit.omnirom.org/#/c/android_build/+/33182/
+To automatically make the TWRP installer zip, you need to import this commit in the build/make path: https://gerrit.twrp.me/c/android_build/+/4964
 
 Finally execute these:
 
@@ -67,6 +67,6 @@ Finally execute these:
 . build/envsetup.sh
 export ALLOW_MISSING_DEPENDENCIES=true
 export LC_ALL=C
-lunch omni_Z01RD-eng
-mka adbd recoveryimage
+lunch twrp_Z01RD-eng
+make adbd bootimage
 ```

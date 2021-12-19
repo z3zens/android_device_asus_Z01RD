@@ -15,7 +15,7 @@
 #
 
 PRODUCT_MAKEFILES := \
-    $(LOCAL_DIR)/omni_Z01RD.mk
+    $(LOCAL_DIR)/twrp_Z01RD.mk
 
 COMMON_LUNCH_CHOICES := \
-    omni_Z01RD-eng
+    twrp_Z01RD-eng
