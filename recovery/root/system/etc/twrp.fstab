@@ -1,7 +1,7 @@
 # mount point   fstype  device                  device2          flags
 /boot            emmc	/dev/block/bootdevice/by-name/boot       flags=slotselect
 /dtbo            emmc   /dev/block/bootdevice/by-name/dtbo       flags=display="DTBO";backup=1;slotselect
-/system          ext4	/dev/block/bootdevice/by-name/system	 flags=display="System";slotselect
+/system          ext4	/dev/block/bootdevice/by-name/system	 flags=display="System";slotselect;wipeingui
 /vendor          ext4   /dev/block/bootdevice/by-name/vendor     flags=display="Vendor";slotselect;wipeingui
 
 /system_image	 emmc   /dev/block/bootdevice/by-name/system     flags=slotselect;flashimg=1
