@@ -19,11 +19,11 @@
 /efsc            emmc   /dev/block/bootdevice/by-name/fsc        flags=backup=1;subpartitionof=/efs1
 /efsg            emmc   /dev/block/bootdevice/by-name/fsg        flags=backup=1;subpartitionof=/efs1
 
-/ADF             ext4   /dev/block/bootdevice/by-name/ADF        flags=display="ADF";backup=1
-/APD             ext4   /dev/block/bootdevice/by-name/APD        flags=display="APD";mounttodecrypt;backup=1
-/asdf            ext4   /dev/block/bootdevice/by-name/asdf       flags=display="ASDF";mounttodecrypt;backup=1
-/factory         ext4   /dev/block/bootdevice/by-name/factory    flags=display="Factory";backup=1
-/dsp             ext4   /dev/block/bootdevice/by-name/dsp        flags=display="DSP";backup=1
+/ADF             emmc   /dev/block/bootdevice/by-name/ADF        flags=display="ADF";backup=1;flashimg=1
+/APD             emmc   /dev/block/bootdevice/by-name/APD        flags=display="APD";backup=1;flashimg=1
+/asdf            emmc   /dev/block/bootdevice/by-name/asdf       flags=display="ASDF";backup=1;flashimg=1
+/factory         emmc   /dev/block/bootdevice/by-name/factory    flags=display="Factory";backup=1;flashimg=1
+/dsp             emmc   /dev/block/bootdevice/by-name/dsp        flags=display="DSP";backup=1;flashimg=1
 
 # Removable storage
 /external_sd	 vfat	/dev/block/mmcblk0p1	/dev/block/mmcblk0	flags=storage;wipeingui;removable;encryptable=footer

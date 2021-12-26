@@ -31,3 +31,14 @@ on fs
     wait /dev/block/platform/soc/${ro.boot.bootdevice}
     symlink /dev/block/platform/soc/${ro.boot.bootdevice} /dev/block/bootdevice
     start boot-hal-1-0
+
+    wait /dev/block/bootdevice/by-name/ADF
+    mount ext4 /dev/block/bootdevice/by-name/ADF /ADF rw noatime
+    chown system system /ADF
+    chmod 0775 /ADF
+    restorecon_recursive /ADF
+
+    wait /dev/block/bootdevice/by-name/asdf
+    mount ext4 /dev/block/bootdevice/by-name/asdf /asdf nosuid noatime nodev barrier=1
+    chown root root /asdf
+    chmod 0775 /asdf
