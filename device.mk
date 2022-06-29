@@ -1,19 +1,9 @@
 #
-# Copyright 2020 The Android Open Source Project
+# Copyright (C) 2020 The Android Open Source Project
+# Copyright (C) 2021-2022 TeamWin Recovery Project
 #
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
+# SPDX-License-Identifier: Apache-2.0
 #
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-#
-
 
 # Inherit from the common Open Source product configuration
 $(call inherit-product, $(SRC_TARGET_DIR)/product/base.mk)
@@ -31,10 +21,8 @@ AB_OTA_PARTITIONS += \
     vbmeta \
     dtbo
 
-# A/B support
 PRODUCT_PACKAGES += \
     otapreopt_script \
-    cppreopts.sh \
     update_engine \
     update_engine_sideload \
     update_verifier
@@ -45,30 +33,28 @@ AB_OTA_POSTINSTALL_CONFIG += \
     FILESYSTEM_TYPE_system=ext4 \
     POSTINSTALL_OPTIONAL_system=true
 
-# qcom standard decryption
-PRODUCT_PACKAGES += \
-    qcom_decrypt \
-    qcom_decrypt_fbe
-
-# Resolution
-TARGET_SCREEN_HEIGHT := 2280
-TARGET_SCREEN_WIDTH := 1080
+# API
+PRODUCT_SHIPPING_API_LEVEL := 26
 
 # Boot control HAL
 PRODUCT_PACKAGES += \
+    android.hardware.boot@1.0-impl \
+    android.hardware.boot@1.0-service \
+    android.hardware.boot@1.0-impl-wrapper.recovery \
+    android.hardware.boot@1.0-impl-wrapper \
     android.hardware.boot@1.0-impl.recovery \
-    bootctrl.$(PRODUCT_PLATFORM).recovery
+    bootctrl.$(PRODUCT_PLATFORM) \
+    bootctrl.$(PRODUCT_PLATFORM).recovery \
 
-PRODUCT_PACKAGES_DEBUG += \
-    bootctl
-
-# Dependencies
-PRODUCT_COPY_FILES += \
-    $(OUT_DIR)/target/product/$(PRODUCT_RELEASE_NAME)/obj/SHARED_LIBRARIES/libandroidicu_intermediates/libandroidicu.so:$(TARGET_COPY_OUT_RECOVERY)/root/system/lib64/libandroidicu.so
-
-# Health HAL
+# fastbootd
 PRODUCT_PACKAGES += \
-    android.hardware.health@2.1-impl.recovery
+    android.hardware.fastboot@1.0-impl-mock \
+    fastbootd
+
+# qcom decryption
+PRODUCT_PACKAGES += \
+    qcom_decrypt \
+    qcom_decrypt_fbe
 
 # Soong namespaces
 PRODUCT_SOONG_NAMESPACES += \
@@ -80,13 +66,10 @@ PRODUCT_BUILD_PROP_OVERRIDES += \
     PRODUCT_NAME=WW_$(PRODUCT_RELEASE_NAME) \
     TARGET_DEVICE=ZS620KL
 
-PRODUCT_PROPERTY_OVERRIDES += \
-    ro.build.product=ZS620KL
-
 # Blacklist
 PRODUCT_SYSTEM_PROPERTY_BLACKLIST += \
     ro.bootimage.build.date.utc \
     ro.build.date.utc
 
-PRODUCT_PROPERTY_OVERRIDES += \
-    ro.vendor.build.security_patch=2099-12-31
+# Custom ROM asserts
+TARGET_OTA_ASSERT_DEVICE := Z01R, Z01RD

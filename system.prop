@@ -1,3 +1,4 @@
 ro.display.series=Asus Zenfone 5z
 ro.product.board=sdm845
 ro.board.platform=sdm845
+ro.crypto.volume.filenames_mode=aes-256-cts

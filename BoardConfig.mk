@@ -1,17 +1,8 @@
 #
-# Copyright 2018 The Android Open Source Project
+# Copyright (C) 2018 The Android Open Source Project
+# Copyright (C) 2019-2022 TeamWin Recovery Project
 #
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
+# SPDX-License-Identifier: Apache-2.0
 #
 
 # This contains the module build definitions for the hardware-specific
@@ -31,15 +22,16 @@ TARGET_ARCH := arm64
 TARGET_ARCH_VARIANT := armv8-a
 TARGET_CPU_ABI := arm64-v8a
 TARGET_CPU_ABI2 :=
-TARGET_CPU_VARIANT := kryo
+TARGET_CPU_VARIANT := generic
+TARGET_CPU_VARIANT_RUNTIME := kryo385
 
 TARGET_2ND_ARCH := arm
-TARGET_2ND_ARCH_VARIANT := armv8-a
+TARGET_2ND_ARCH_VARIANT := $(TARGET_ARCH_VARIANT)
 TARGET_2ND_CPU_ABI := armeabi-v7a
 TARGET_2ND_CPU_ABI2 := armeabi
-TARGET_2ND_CPU_VARIANT := cortex-a53
+TARGET_2ND_CPU_VARIANT := $(TARGET_CPU_VARIANT)
+TARGET_2ND_CPU_VARIANT_RUNTIME := $(TARGET_CPU_VARIANT_RUNTIME)
 
-# CPU
 ENABLE_CPUSETS := true
 ENABLE_SCHEDBOOST := true
 
@@ -85,10 +77,12 @@ TARGET_BOARD_PLATFORM_GPU := qcom-adreno630
 TARGET_USES_HARDWARE_QCOM_BOOTCTRL := true
 QCOM_BOARD_PLATFORMS += $(TARGET_BOARD_PLATFORM)
 
-# Partitions
-BOARD_FLASH_BLOCK_SIZE := 262144
+# Android Verified Boot
+BOARD_AVB_ENABLE := false
+BOARD_BUILD_DISABLED_VBMETAIMAGE := true
 
 # Partitions
+BOARD_FLASH_BLOCK_SIZE := 262144
 BOARD_BOOTIMAGE_PARTITION_SIZE := 67108864
 BOARD_RECOVERYIMAGE_PARTITION_SIZE := 67108864
 BOARD_SYSTEMIMAGE_PARTITION_SIZE := 2986344448
@@ -110,47 +104,32 @@ BOARD_ROOT_EXTRA_FOLDERS := ADF \
                             persist \
                             xrom
 
-TARGET_RECOVERY_DEVICE_MODULES += \
-    android.hidl.base@1.0 \
-    bootctrl.$(TARGET_BOARD_PLATFORM) \
-    libandroidicu \
-    libcap \
-    libion \
-    libpcrecpp \
-    libxml2 \
-    tzdata
-
-TW_RECOVERY_ADDITIONAL_RELINK_LIBRARY_FILES += \
-    $(TARGET_OUT_SHARED_LIBRARIES)/android.hidl.base@1.0.so \
-    $(TARGET_OUT_SHARED_LIBRARIES)/libcap.so \
-    $(TARGET_OUT_SHARED_LIBRARIES)/libion.so \
-    $(TARGET_OUT_SHARED_LIBRARIES)/libpcrecpp.so \
-    $(TARGET_OUT_SHARED_LIBRARIES)/libxml2.so
-
 # Workaround for error copying vendor files to recovery ramdisk
 TARGET_COPY_OUT_VENDOR := vendor
 
 # Recovery
-TARGET_OTA_ASSERT_DEVICE := Z01RD
+BUILD_BROKEN_ELF_PREBUILT_PRODUCT_COPY_FILES := true
 BOARD_HAS_LARGE_FILESYSTEM := true
 BOARD_HAS_NO_SELECT_BUTTON := true
-
-# Android Verified Boot
-BOARD_AVB_ENABLE := false
-BOARD_BUILD_DISABLED_VBMETAIMAGE := true
+TARGET_RECOVERY_DEVICE_MODULES += \
+    android.hardware.vibrator-ndk_platform \
+    libion \
+    libxml2 \
+    vendor.display.config@1.0 \
+    vendor.display.config@2.0
 
 # Enable A/B Specific Flags
 BOARD_BUILD_SYSTEM_ROOT_IMAGE := true
 BOARD_USES_RECOVERY_AS_BOOT := true
 
-# Crypto
-TW_INCLUDE_CRYPTO := true
-TW_INCLUDE_RESETPROP := true
-TW_USE_FSCRYPT_POLICY := 1
+# Encryption
+BOARD_USES_METADATA_PARTITION := true
 BOARD_USES_QCOM_FBE_DECRYPTION := true
-PLATFORM_VERSION := 16.1.0
-PLATFORM_SECURITY_PATCH := 2099-12-31
-VENDOR_SECURITY_PATCH :=  2099-12-31
+PLATFORM_VERSION := 127
+PLATFORM_VERSION_LAST_STABLE := $(PLATFORM_VERSION)
+PLATFORM_SECURITY_PATCH := 2127-12-31
+PRODUCT_ENFORCE_VINTF_MANIFEST := true
+VENDOR_SECURITY_PATCH := $(PLATFORM_SECURITY_PATCH)
 
 # SELinux
 BOARD_PLAT_PRIVATE_SEPOLICY_DIR += $(DEVICE_PATH)/sepolicy/private
@@ -170,14 +149,49 @@ TW_BRIGHTNESS_PATH := /sys/class/backlight/panel0-backlight/brightness
 TW_MAX_BRIGHTNESS := 255
 TW_INCLUDE_NTFS_3G := true
 TW_EXTRA_LANGUAGES := true
+TW_INCLUDE_CRYPTO := true
+TW_INCLUDE_RESETPROP := true
 TW_INPUT_BLACKLIST := hbtp_vm
-TW_EXCLUDE_TWRPAPP := true
-TW_NO_USB_STORAGE := true
-TW_INCLUDE_REPACKTOOLS := true
-TW_HAS_EDL_MODE := true
-TWRP_INCLUDE_LOGCAT := true
-TARGET_USES_LOGD := true
 TW_Y_OFFSET := 80
 TW_H_OFFSET := -80
-USE_RECOVERY_INSTALLER := true
-RECOVERY_INSTALLER_PATH := bootable/recovery/installer
+TW_EXCLUDE_TWRPAPP := true
+TW_NO_USB_STORAGE := true
+TW_HAS_EDL_MODE := true
+RECOVERY_LIBRARY_SOURCE_FILES += \
+    $(TARGET_OUT_SHARED_LIBRARIES)/libion.so \
+    $(TARGET_OUT_SHARED_LIBRARIES)/libxml2.so \
+    $(TARGET_OUT_SYSTEM_EXT_SHARED_LIBRARIES)/vendor.display.config@1.0.so \
+    $(TARGET_OUT_SYSTEM_EXT_SHARED_LIBRARIES)/vendor.display.config@2.0.so
+TW_USE_FSCRYPT_POLICY := 1
+
+# TWRP Debug Flags
+#TWRP_EVENT_LOGGING := true
+TARGET_USES_LOGD := true
+TWRP_INCLUDE_LOGCAT := true
+TARGET_RECOVERY_DEVICE_MODULES += debuggerd
+RECOVERY_BINARY_SOURCE_FILES += $(TARGET_OUT_EXECUTABLES)/debuggerd
+TARGET_RECOVERY_DEVICE_MODULES += strace
+RECOVERY_BINARY_SOURCE_FILES += $(TARGET_OUT_EXECUTABLES)/strace
+
+#
+# For local builds only
+#
+# TWRP zip installer
+ifneq ($(wildcard bootable/recovery/installer/.),)
+    USE_RECOVERY_INSTALLER := true
+    RECOVERY_INSTALLER_PATH := bootable/recovery/installer
+endif
+
+# Custom TWRP Versioning
+ifneq ($(wildcard device/common/version-info/.),)
+    CUSTOM_TWRP_VERSION_PREFIX := CPTB
+
+    include device/common/version-info/custom_twrp_version.mk
+
+    ifeq ($(CUSTOM_TWRP_VERSION),)
+        CUSTOM_TWRP_VERSION := $(shell date +%Y%m%d)-01
+    endif
+endif
+#
+# end local build flags
+#
