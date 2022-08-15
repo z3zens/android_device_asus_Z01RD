@@ -152,10 +152,11 @@ TW_EXTRA_LANGUAGES := true
 TW_INCLUDE_CRYPTO := true
 TW_INCLUDE_RESETPROP := true
 TW_INPUT_BLACKLIST := hbtp_vm
-TW_Y_OFFSET := 80
-TW_H_OFFSET := -80
+TW_Y_OFFSET := 100
+TW_H_OFFSET := -100
 TW_EXCLUDE_TWRPAPP := true
 TW_NO_USB_STORAGE := true
+TW_INCLUDE_REPACKTOOLS := true
 TW_HAS_EDL_MODE := true
 RECOVERY_LIBRARY_SOURCE_FILES += \
     $(TARGET_OUT_SHARED_LIBRARIES)/libion.so \
@@ -184,7 +185,7 @@ endif
 
 # Custom TWRP Versioning
 ifneq ($(wildcard device/common/version-info/.),)
-    CUSTOM_TWRP_VERSION_PREFIX := CPTB
+    CUSTOM_TWRP_VERSION_PREFIX := UNOFFICIAL
 
     include device/common/version-info/custom_twrp_version.mk
 
