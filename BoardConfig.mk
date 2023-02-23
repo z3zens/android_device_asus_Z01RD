@@ -113,6 +113,7 @@ BOARD_HAS_LARGE_FILESYSTEM := true
 BOARD_HAS_NO_SELECT_BUTTON := true
 TARGET_RECOVERY_DEVICE_MODULES += \
     android.hardware.vibrator-ndk_platform \
+    bootctrl.$(TARGET_BOARD_PLATFORM) \
     libion \
     libxml2 \
     vendor.display.config@1.0 \
